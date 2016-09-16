@@ -24,7 +24,8 @@ def read_cfg(file_path, section):
     try:
         parser.read(os.path.expanduser(file_path))
         for option in parser.options(section):
-            d[option] = parser.get(section, option)
+            # build dictionary of sections and strip apostrophes
+            d[option] = parser.get(section, option)[1:-1]
         return d
     except:
         print "Config read failed"
