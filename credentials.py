@@ -3,7 +3,17 @@ from ConfigParser import SafeConfigParser
 
 
 def find_pass_cfg(file_path=None):
-    """ Will verify a file path given, or return default path to cfg file
+    """Returns existing path to cfg file.
+
+    Verifies existence of file_path argument or returns default file_path
+    for pass.cfg file.
+
+    Args:
+        file_path (Optional(str)): Path to pass.cfg file.
+
+    Returns:
+        string: Verified path to pass.cfg file.
+
     """
     if not file_path:
         file_path = '~/.pass.cfg'
@@ -14,18 +24,26 @@ def find_pass_cfg(file_path=None):
         return None
 
 
-def read_cfg(file_path, section):
-    """ Reads a cfg file and
-        returns a dictionary of options for a given section.
+def read_cfg(file_path, account):
+    """
+    Reads pass.cfg file and returns dictionary of accounts.
+
+    Args:
+        file_path (str): Path to pass.cfg file.
+        account (str): Account information to extract.
+
+    Returns:
+        dict: Account information object.
+
     """
     d = {}
     parser = SafeConfigParser()
 
     try:
         parser.read(os.path.expanduser(file_path))
-        for option in parser.options(section):
-            # build dictionary of sections and strip apostrophes
-            d[option] = parser.get(section, option)[1:-1]
+        for option in parser.options(account):
+            # [1:-1] strips apostrophes wrapping the string
+            d[option] = parser.get(account, option)[1:-1]
         return d
     except:
         print "Config read failed"
